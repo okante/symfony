@@ -1,0 +1,14 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Ajouter une nouvelle adresse{% endblock %}
+
+{% block body %}
+<h1>Welcome to the Location:list page</h1>
+
+{{ form_start(form, {'attr': {'class': 'my-form-class'} }) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="Create"
+           class="btn btn-default pull-right" />
+{{ form_end(form) }}
+
+{% endblock %}

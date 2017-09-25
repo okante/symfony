@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Form\LocationType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use AppBundle\Entity\Location;
+use Symfony\Component\HttpFoundation\Request;
 
 class LocationController extends Controller
 {
@@ -33,11 +34,11 @@ class LocationController extends Controller
     /**
      * @Route("addlocation")
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
-        $form = $this->get('form.factory')->create(new LocationType());
-        $form->add('submit', SubmitType::class);
-        $request = $this->get('request');
+        $location = new Location();
+        $form = $this->createForm(LocationType::class, $location);
+        //$request = $this->get('request');
         
         $form->handleRequest($request);
         
@@ -45,11 +46,15 @@ class LocationController extends Controller
             $data = $form->getData();
             
             // ... perform some action, such as saving the data to the database
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($location);
+            $em->flush();
             
             return $this->redirectToRoute('location_registered');
         }
         return $this->render('AppBundle:Location:new.html.twig', array(
             // ...
+            'form' => $form->createView()
         ));
         // ...
         
